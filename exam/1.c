@@ -40,7 +40,9 @@ int main() {
 	  fprintf(q, "Roll: %d\tMarks: %f\tStatus: ", student[i].roll, student[i].marks);
 	  if (student[i].marks > average)
 		fprintf(q, "Above average\n");
-	 else
+	 else if (student[i].marks == average)
+		fprintf(q, "Average\n");
+	else
 		fprintf(q, "Below average\n");
 	}
     close(pipefd[0]);
