@@ -27,21 +27,23 @@ int main() {
         exit(1);
     }
     sem_t *empty = sem_open("EMPTY", O_CREAT, 0666, 5);
-    sem_unlink("EMPTY");
+
     sem_t *full = sem_open("FULL", O_CREAT, 0666, 0);
-    sem_unlink("FULL");
+
     sem_t *mutex = sem_open("MUTEX", O_CREAT, 0666, 1);
-    sem_unlink("MUTEX");
+
     s = shm;
     c = 'a';
-    sleep(1);
     while (c <= 'z') {
         sem_wait(empty);
         sem_wait(mutex);
         printf("Producer 1 in CS\n");
-        *s++ = c;
+        *s++ = c++;
         sem_post(mutex);
         sem_post(full);
     }
+    sem_unlink("EMPTY");
+    sem_unlink("FULL");
+    sem_unlink("MUTEX");
     return 0;
 }

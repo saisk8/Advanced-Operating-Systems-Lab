@@ -26,23 +26,26 @@ int main() {
         perror("shmat");
         exit(1);
     }
-    sem_t *empty = sem_open("EMPTY", O_CREAT | O_EXCL, 0666, 5);
-    sem_unlink("EMPTY");
-    sem_t *full = sem_open("FULL", O_CREAT | O_EXCL, 0666, 0);
-    sem_unlink("FULL");
-    sem_t *mutex = sem_open("MUTEX", O_CREAT | O_EXCL, 0666, 1);
-    sem_unlink("MUTEX");
+    sem_t *empty = sem_open("EMPTY", 0);
+    // if (!empty) printf("Fucked up!\n");
+    // sem_unlink("EMPTY");
+    sem_t *full = sem_open("FULL", 0);
+    // sem_unlink("FULL");
+    sem_t *mutex = sem_open("MUTEX", 0);
+    // sem_unlink("MUTEX");
     s = shm;
     c = 26 + 26;
     while (c--) {
         sem_wait(full);
         sem_wait(mutex);
-        printf("Consumer in CS\n");
-        *s++ = c;
-        printf("%c", c);
+        printf("%c", *s++);
         sem_post(mutex);
         sem_post(empty);
     }
+    printf("\n");
+    sem_unlink("EMPTY");
+    sem_unlink("FULL");
+    sem_unlink("MUTEX");
 
     return 0;
 }
